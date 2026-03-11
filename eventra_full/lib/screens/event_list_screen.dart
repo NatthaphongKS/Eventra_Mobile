@@ -75,8 +75,7 @@ class _EventListScreenState extends State<EventListScreen>
             ),
           ),
           PopupMenuButton<String>(
-            icon:
-                const Icon(Icons.more_vert, color: AppColors.textPrimary),
+            icon: const Icon(Icons.more_vert, color: AppColors.textPrimary),
             onSelected: (v) {
               if (v == 'logout') _logout();
             },
@@ -115,8 +114,7 @@ class _EventListScreenState extends State<EventListScreen>
       ),
       body: _isLoading
           ? const Center(
-              child:
-                  CircularProgressIndicator(color: AppColors.primary))
+              child: CircularProgressIndicator(color: AppColors.primary))
           : RefreshIndicator(
               color: AppColors.primary,
               onRefresh: _loadEvents,
@@ -158,8 +156,7 @@ class _EventTabView extends StatelessWidget {
   final List<Event> events;
   final Function(Event) onEventTap;
 
-  const _EventTabView(
-      {required this.events, required this.onEventTap});
+  const _EventTabView({required this.events, required this.onEventTap});
 
   @override
   Widget build(BuildContext context) {
@@ -172,8 +169,7 @@ class _EventTabView extends StatelessWidget {
                 size: 64, color: AppColors.textSecondary),
             SizedBox(height: 12),
             Text('ไม่มีกิจกรรม',
-                style: TextStyle(
-                    color: AppColors.textSecondary, fontSize: 16)),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 16)),
           ],
         ),
       );

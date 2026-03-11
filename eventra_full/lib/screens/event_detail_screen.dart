@@ -72,8 +72,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
             ),
             Text(
               dateStr,
-              style: const TextStyle(
-                  fontSize: 14, color: AppColors.textSecondary),
+              style:
+                  const TextStyle(fontSize: 14, color: AppColors.textSecondary),
             ),
             const SizedBox(height: 20),
             _DetailSection(
@@ -172,8 +172,8 @@ class _DetailSection extends StatelessWidget {
                 color: AppColors.textPrimary)),
         const SizedBox(height: 4),
         Text(content,
-            style: const TextStyle(
-                fontSize: 14, color: AppColors.textSecondary)),
+            style:
+                const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
       ],
     );
   }
@@ -199,8 +199,8 @@ class _OutlineButton extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         ),
         child: Text(label,
-            style:
-                TextStyle(color: color, fontSize: 16, fontWeight: FontWeight.w600)),
+            style: TextStyle(
+                color: color, fontSize: 16, fontWeight: FontWeight.w600)),
       ),
     );
   }

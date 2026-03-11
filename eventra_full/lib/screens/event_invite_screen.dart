@@ -40,8 +40,7 @@ class _EventInviteScreenState extends State<EventInviteScreen>
   }
 
   List<Guest> get _allGuests => _guests;
-  List<Guest> get _invitedGuests =>
-      _guests.where((g) => g.isInvited).toList();
+  List<Guest> get _invitedGuests => _guests.where((g) => g.isInvited).toList();
   List<Guest> get _notInvitedGuests =>
       _guests.where((g) => !g.isInvited).toList();
 
@@ -55,15 +54,16 @@ class _EventInviteScreenState extends State<EventInviteScreen>
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('ยืนยันการลบ'),
-        content: Text('ต้องการลบ ${guest.fullName} ออกจากรายชื่อผู้ได้รับเชิญ?'),
+        content:
+            Text('ต้องการลบ ${guest.fullName} ออกจากรายชื่อผู้ได้รับเชิญ?'),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(ctx, false),
               child: const Text('ยกเลิก')),
           TextButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('ลบ',
-                  style: TextStyle(color: AppColors.primary))),
+              child:
+                  const Text('ลบ', style: TextStyle(color: AppColors.primary))),
         ],
       ),
     );
@@ -228,8 +228,7 @@ class _GuestListInvited extends StatelessWidget {
   final List<Guest> guests;
   final Function(Guest) onRemove;
 
-  const _GuestListInvited(
-      {required this.guests, required this.onRemove});
+  const _GuestListInvited({required this.guests, required this.onRemove});
 
   @override
   Widget build(BuildContext context) {

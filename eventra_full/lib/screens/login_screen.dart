@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 const Spacer(flex: 2),
                 // Logo
-                Text(
+                const Text(
                   'Eventra',
                   style: TextStyle(
                     fontSize: 52,
@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onTap: () {
                       // TODO: Navigate to forgot password
                     },
-                    child: Text(
+                    child: const Text(
                       'forgot password',
                       style: TextStyle(
                         color: AppColors.primary,

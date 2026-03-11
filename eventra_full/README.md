@@ -31,6 +31,7 @@ lib/
 ## วิธี Build APK
 
 ### 1. ติดตั้ง Flutter
+
 ```bash
 # ดาวน์โหลดจาก https://flutter.dev
 # แล้วเพิ่ม flutter/bin ใน PATH
@@ -38,24 +39,28 @@ flutter doctor
 ```
 
 ### 2. ติดตั้ง dependencies
+
 ```bash
 cd eventra
 flutter pub get
 ```
 
 ### 3. Build APK (debug)
+
 ```bash
 flutter build apk --debug
 # ไฟล์อยู่ที่: build/app/outputs/flutter-apk/app-debug.apk
 ```
 
 ### 4. Build APK (release)
+
 ```bash
 flutter build apk --release
 # ไฟล์อยู่ที่: build/app/outputs/flutter-apk/app-release.apk
 ```
 
 ### 5. ติดตั้งบนมือถือ (ต้องเชื่อมต่อ USB + เปิด Developer Mode)
+
 ```bash
 flutter install
 # หรือ
@@ -97,6 +102,7 @@ POST   /api/events/{id}/guests/{guestId}/checkin  → เช็คชื่อ
 ## Database (eventra_db)
 
 ใช้ข้อมูลจาก .env ที่ให้มา:
+
 - DB_HOST: 10.80.7.17
 - DB_PORT: 7306
 - DB_DATABASE: eventra_db
@@ -104,10 +110,10 @@ POST   /api/events/{id}/guests/{guestId}/checkin  → เช็คชื่อ
 
 ## สีหลักของแอป
 
-| ชื่อ | Hex |
-|------|-----|
+| ชื่อ              | Hex     |
+| ----------------- | ------- |
 | Primary (แดงเข้ม) | #8B1A1A |
 | Accent (ปุ่มเชิญ) | #FF7070 |
 | Ongoing (น้ำเงิน) | #4DA6FF |
 | Upcoming (เหลือง) | #FFCC44 |
-| Done (เขียว) | #66CC88 |
+| Done (เขียว)      | #66CC88 |

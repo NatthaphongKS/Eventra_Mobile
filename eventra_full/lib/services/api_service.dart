@@ -46,7 +46,10 @@ class ApiService {
       await Future.delayed(const Duration(seconds: 1));
       if (username.isNotEmpty && password.isNotEmpty) {
         await saveToken('mock_token_12345');
-        return {'success': true, 'user': {'name': username}};
+        return {
+          'success': true,
+          'user': {'name': username}
+        };
       }
       return {'success': false, 'message': 'Invalid credentials'};
     }
@@ -242,7 +245,8 @@ class ApiService {
     );
   }
 
-  static Future<void> checkInGuest(int eventId, int guestId, bool checked) async {
+  static Future<void> checkInGuest(
+      int eventId, int guestId, bool checked) async {
     if (useMockData) {
       await Future.delayed(const Duration(milliseconds: 200));
       MockData.checkInStatus[guestId] = checked;

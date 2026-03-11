@@ -69,10 +69,11 @@ class _EventFormScreenState extends State<EventFormScreen> {
     final t = await showTimePicker(context: context, initialTime: initial);
     if (t != null) {
       setState(() {
-        if (isStart)
+        if (isStart) {
           _startTime = t;
-        else
+        } else {
           _endTime = t;
+        }
       });
     }
   }

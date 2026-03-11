@@ -72,18 +72,78 @@ class MockData {
       ];
 
   static List<Guest> get guests => [
-        Guest(id: 1, firstName: 'สมชาย', lastName: 'ใจดี', email: 'somchai@example.com', isInvited: true),
-        Guest(id: 2, firstName: 'สมหญิง', lastName: 'รักสวย', email: 'somying@example.com', isInvited: true),
-        Guest(id: 3, firstName: 'วิชัย', lastName: 'มานะ', email: 'wichai@example.com', isInvited: false),
-        Guest(id: 4, firstName: 'อรุณ', lastName: 'สว่าง', email: 'arun@example.com', isInvited: true),
-        Guest(id: 5, firstName: 'นภา', lastName: 'ฟ้าใส', email: 'napa@example.com', isInvited: false),
-        Guest(id: 6, firstName: 'ธนา', lastName: 'มีโชค', email: 'tana@example.com', isInvited: true),
-        Guest(id: 7, firstName: 'รัตนา', lastName: 'แก้วใส', email: 'rattana@example.com', isInvited: false),
-        Guest(id: 8, firstName: 'พิชัย', lastName: 'เจริญ', email: 'pichai@example.com', isInvited: true),
-        Guest(id: 9, firstName: 'กัญญา', lastName: 'สดใส', email: 'kanya@example.com', isInvited: false),
-        Guest(id: 10, firstName: 'ประยุทธ', lastName: 'แน่วแน่', email: 'prayut@example.com', isInvited: true),
-        Guest(id: 11, firstName: 'วรรณา', lastName: 'งามตา', email: 'wanna@example.com', isInvited: true),
-        Guest(id: 12, firstName: 'สุรชัย', lastName: 'ยิ้มแย้ม', email: 'surachai@example.com', isInvited: false),
+        Guest(
+            id: 1,
+            firstName: 'สมชาย',
+            lastName: 'ใจดี',
+            email: 'somchai@example.com',
+            isInvited: true),
+        Guest(
+            id: 2,
+            firstName: 'สมหญิง',
+            lastName: 'รักสวย',
+            email: 'somying@example.com',
+            isInvited: true),
+        Guest(
+            id: 3,
+            firstName: 'วิชัย',
+            lastName: 'มานะ',
+            email: 'wichai@example.com',
+            isInvited: false),
+        Guest(
+            id: 4,
+            firstName: 'อรุณ',
+            lastName: 'สว่าง',
+            email: 'arun@example.com',
+            isInvited: true),
+        Guest(
+            id: 5,
+            firstName: 'นภา',
+            lastName: 'ฟ้าใส',
+            email: 'napa@example.com',
+            isInvited: false),
+        Guest(
+            id: 6,
+            firstName: 'ธนา',
+            lastName: 'มีโชค',
+            email: 'tana@example.com',
+            isInvited: true),
+        Guest(
+            id: 7,
+            firstName: 'รัตนา',
+            lastName: 'แก้วใส',
+            email: 'rattana@example.com',
+            isInvited: false),
+        Guest(
+            id: 8,
+            firstName: 'พิชัย',
+            lastName: 'เจริญ',
+            email: 'pichai@example.com',
+            isInvited: true),
+        Guest(
+            id: 9,
+            firstName: 'กัญญา',
+            lastName: 'สดใส',
+            email: 'kanya@example.com',
+            isInvited: false),
+        Guest(
+            id: 10,
+            firstName: 'ประยุทธ',
+            lastName: 'แน่วแน่',
+            email: 'prayut@example.com',
+            isInvited: true),
+        Guest(
+            id: 11,
+            firstName: 'วรรณา',
+            lastName: 'งามตา',
+            email: 'wanna@example.com',
+            isInvited: true),
+        Guest(
+            id: 12,
+            firstName: 'สุรชัย',
+            lastName: 'ยิ้มแย้ม',
+            email: 'surachai@example.com',
+            isInvited: false),
       ];
 
   // Simulated check-in data: guestId -> isCheckedIn

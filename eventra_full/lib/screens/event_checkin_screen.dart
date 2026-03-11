@@ -47,8 +47,7 @@ class _EventCheckInScreenState extends State<EventCheckInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final dateStr =
-        DateFormat('d MMMM yyyy', 'th').format(widget.event.date);
+    final dateStr = DateFormat('d MMMM yyyy', 'th').format(widget.event.date);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -115,8 +114,8 @@ class _EventCheckInScreenState extends State<EventCheckInScreen> {
                               : 0,
                           minHeight: 10,
                           backgroundColor: Colors.grey[200],
-                          valueColor: const AlwaysStoppedAnimation<Color>(
-                              Colors.green),
+                          valueColor:
+                              const AlwaysStoppedAnimation<Color>(Colors.green),
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -138,8 +137,8 @@ class _EventCheckInScreenState extends State<EventCheckInScreen> {
                               style: const TextStyle(color: Colors.white)),
                         ),
                         title: Text(g.fullName,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w500)),
+                            style:
+                                const TextStyle(fontWeight: FontWeight.w500)),
                         trailing: GestureDetector(
                           onTap: () => _toggleCheckIn(g),
                           child: Container(

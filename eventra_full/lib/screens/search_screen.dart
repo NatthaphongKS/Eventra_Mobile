@@ -83,16 +83,15 @@ class _SearchScreenState extends State<SearchScreen> {
             Expanded(
               child: _isSearching
                   ? const Center(
-                      child: CircularProgressIndicator(
-                          color: AppColors.primary))
+                      child:
+                          CircularProgressIndicator(color: AppColors.primary))
                   : _hasSearched && _results.isEmpty
                       ? const Center(
                           child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(Icons.search_off,
-                                size: 56,
-                                color: AppColors.textSecondary),
+                                size: 56, color: AppColors.textSecondary),
                             SizedBox(height: 12),
                             Text('ไม่พบกิจกรรม',
                                 style: TextStyle(
