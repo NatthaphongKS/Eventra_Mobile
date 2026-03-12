@@ -6,9 +6,8 @@ import '../models/guest.dart';
 import '../data/mock_data.dart';
 
 class ApiService {
-  // TODO: Change to your actual Laravel backend URL
-  static const String baseUrl = 'http://10.80.7.17:8000/api';
-  static const bool useMockData = true; // Set to false when backend is ready
+  static const String baseUrl = 'https://eventra.kasecode.com/api';
+  static const bool useMockData = false;
 
   static String? _token;
 
