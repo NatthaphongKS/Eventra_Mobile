@@ -138,7 +138,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
             ),
             const SizedBox(height: 12),
             _FilledButton(
-              label: 'เชคชื่อผู้เข้าร่วม',
+              label: 'เช็คชื่อผู้เข้าร่วม',
               color: AppColors.primaryDark,
               onTap: () => Navigator.push(
                 context,
