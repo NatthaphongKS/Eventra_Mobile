@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/event_model.dart';
-import '../utils/app_theme.dart';
+import '../core/app_theme.dart'; // ตรวจสอบว่า path ถูกต้อง (บางที่ใช้ core/app_theme)
 
 class EventCard extends StatelessWidget {
-  final Event event;
+  final EventModel event;
   final VoidCallback? onTap;
 
   const EventCard({super.key, required this.event, this.onTap});
 
+  // ปรับให้ดึงจาก evnStatus
   Color get _statusColor {
-    switch (event.status) {
+    switch (event.evnStatus) {
       case 'ongoing':
         return AppColors.statusOngoing;
       case 'upcoming':
@@ -22,22 +23,18 @@ class EventCard extends StatelessWidget {
     }
   }
 
+  // ปรับให้ดึงจาก evnStatus และทำตัวพิมพ์ใหญ่ตัวแรก
   String get _statusLabel {
-    switch (event.status) {
-      case 'ongoing':
-        return 'Ongoing';
-      case 'upcoming':
-        return 'Upcoming';
-      case 'done':
-        return 'Done';
-      default:
-        return event.status;
-    }
+    if (event.evnStatus == null) return 'Unknown';
+    return event.evnStatus![0].toUpperCase() + event.evnStatus!.substring(1);
   }
 
   @override
   Widget build(BuildContext context) {
-    final dateStr = DateFormat('d MMMM yyyy', 'th').format(event.date);
+    // จัดการเรื่องวันที่ ถ้า evnDate เป็น null ให้แสดงค่าว่างหรือข้อความเตือน
+    final dateStr = event.evnDate != null
+        ? DateFormat('d MMMM yyyy', 'th').format(event.evnDate!)
+        : 'ไม่ระบุวันที่';
 
     return GestureDetector(
       onTap: onTap,
@@ -61,45 +58,62 @@ class EventCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // เปลี่ยนจาก event.name เป็น event.evnTitle
                   Text(
-                    event.name,
+                    event.evnTitle ?? 'ไม่มีชื่อกิจกรรม',
                     style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 6),
-                  _InfoRow(
-                    icon: Icons.article_outlined,
-                    text: event.description,
-                  ),
+
+                  // เปลี่ยนจาก event.description เป็น event.evnDescription
+                  if (event.evnDescription != null &&
+                      event.evnDescription!.isNotEmpty)
+                    _InfoRow(
+                      icon: Icons.article_outlined,
+                      text: event.evnDescription!,
+                    ),
+
                   _InfoRow(icon: Icons.calendar_today_outlined, text: dateStr),
+
+                  // ใช้ Helper timeRange ที่ Ohm เขียนไว้ใน Model ได้เลย
                   _InfoRow(
                     icon: Icons.access_time_outlined,
-                    text: '${event.startTime} - ${event.endTime}',
+                    text: event.timeRange,
                   ),
+
+                  // เปลี่ยนจาก participantCount เป็น evnLocation เพราะใน Model ใหม่ไม่มีจำนวนคน
                   _InfoRow(
-                    icon: Icons.people_outline,
-                    text: '${event.participantCount} คน',
+                    icon: Icons.location_on_outlined,
+                    text: event.evnLocation ?? 'ไม่ระบุสถานที่',
                   ),
                 ],
               ),
             ),
             const SizedBox(width: 8),
+
+            // สถานะ (Status Badge)
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
               decoration: BoxDecoration(
-                color: _statusColor.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: _statusColor, width: 1.2),
+                color: _statusColor.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: _statusColor.withOpacity(0.5),
+                  width: 1,
+                ),
               ),
               child: Text(
                 _statusLabel,
                 style: TextStyle(
                   color: _statusColor,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
                 ),
               ),
             ),

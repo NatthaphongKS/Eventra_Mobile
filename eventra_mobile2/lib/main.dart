@@ -35,7 +35,7 @@ class EventraApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
       initialRoute: initialRoute,
       getPages: [
-        GetPage(name: '/login', page: () => const LoginView()),
+        GetPage(name: '/login', page: () => LoginView()),
         GetPage(name: '/home', page: () => EventListView()),
         GetPage(name: '/event-details', page: () => const EventDetailsView()),
         GetPage(name: '/event-form', page: () => const EventFormView()),

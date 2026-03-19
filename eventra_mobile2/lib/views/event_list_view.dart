@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/event_controller.dart';
-import '../widgets/event_card.dart'; // อย่าลืมปรับ EventCard ให้รับ EventModel
+import '../controllers/auth_controller.dart'; // 1. เพิ่ม Import AuthController
+import '../widgets/event_card.dart';
+import '../models/event_model.dart';
 
 class EventListView extends StatelessWidget {
+  // 2. เรียกใช้งาน Controllers
   final EventController controller = Get.put(EventController());
+  final AuthController authController =
+      Get.find<
+        AuthController
+      >(); // ใช้ Get.find เพราะ AuthController มักจะถูก init ไว้ตั้งแต่หน้า Login หรือ Main
 
   final List<String> _tabs = ['Upcoming', 'Ongoing', 'Done'];
   final List<String> _statuses = ['upcoming', 'ongoing', 'done'];
   final List<Color> _dotColors = [Colors.blue, Colors.orange, Colors.green];
+
+  EventListView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +37,23 @@ class EventListView extends StatelessWidget {
               onPressed: () => Get.toNamed('/search'),
             ),
             PopupMenuButton<String>(
-              onSelected: (v) => v == 'logout' ? controller.logout() : null,
+              // 3. แก้ไขจุดนี้ให้เรียกใช้ authController.logout()
+              onSelected: (v) {
+                if (v == 'logout') {
+                  authController.logout();
+                }
+              },
               itemBuilder: (_) => [
-                const PopupMenuItem(value: 'logout', child: Text('ออกจากระบบ')),
+                const PopupMenuItem(
+                  value: 'logout',
+                  child: Row(
+                    children: [
+                      Icon(Icons.logout, color: Colors.red, size: 20),
+                      SizedBox(width: 8),
+                      Text('ออกจากระบบ'),
+                    ],
+                  ),
+                ),
               ],
             ),
           ],
