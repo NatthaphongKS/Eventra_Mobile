@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'View/login.dart';
 import 'View/home_screen.dart';
+import 'utils/app_theme.dart';
 
 void main() async {
   // ต้องมีบรรทัดนี้เพื่อให้ Flutter รอการเชื่อมต่อกับ Native code
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Eventra',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true, primarySwatch: Colors.blue),
+      theme: AppTheme.theme,
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {

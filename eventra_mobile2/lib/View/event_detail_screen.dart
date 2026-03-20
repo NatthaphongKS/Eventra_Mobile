@@ -42,9 +42,9 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     final dateStr = _event.date;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.background,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
           onPressed: () => Navigator.pop(context),
@@ -66,26 +66,24 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
             Text(
               _event.name,
               style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
               ),
             ),
             Text(
               dateStr,
-              style:
-                  const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+              style: const TextStyle(
+                fontSize: 14,
+                color: AppColors.textSecondary,
+              ),
             ),
             const SizedBox(height: 20),
-            _DetailSection(
-              title: 'รายละเอียด',
-              content: _event.description,
-            ),
+            Divider(color: AppColors.divider),
             const SizedBox(height: 16),
-            _DetailSection(
-              title: 'สถานที่จัด',
-              content: _event.location,
-            ),
+            _DetailSection(title: 'รายละเอียด', content: _event.description),
+            const SizedBox(height: 16),
+            _DetailSection(title: 'สถานที่จัด', content: _event.location),
             const SizedBox(height: 20),
             Text(
               _event.time, // 💡 เปลี่ยนมาใช้ _event.time จาก Model ใหม่
@@ -96,7 +94,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            
+
             // 💡 ซ่อนจำนวนผู้เข้าร่วมไว้ก่อน เพราะถ้าใช้ Firebase ต้องไป Query นับจำนวนจากหน้าอื่นมาแทน
             /*
             Text(
@@ -109,11 +107,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
             ),
             const SizedBox(height: 12),
             */
-
-            _DetailSection(
-              title: 'สถานะ',
-              content: _statusThai,
-            ),
+            _DetailSection(title: 'สถานะ', content: _statusThai),
             const SizedBox(height: 32),
             // Buttons
             _OutlineButton(
@@ -161,15 +155,19 @@ class _DetailSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title,
-            style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary)),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
         const SizedBox(height: 4),
-        Text(content,
-            style:
-                const TextStyle(fontSize: 14, color: AppColors.textSecondary)),
+        Text(
+          content,
+          style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+        ),
       ],
     );
   }
@@ -179,8 +177,11 @@ class _OutlineButton extends StatelessWidget {
   final String label;
   final Color color;
   final VoidCallback onTap;
-  const _OutlineButton(
-      {required this.label, required this.color, required this.onTap});
+  const _OutlineButton({
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -191,12 +192,18 @@ class _OutlineButton extends StatelessWidget {
         onPressed: onTap,
         style: OutlinedButton.styleFrom(
           side: BorderSide(color: color, width: 1.5),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
         ),
-        child: Text(label,
-            style: TextStyle(
-                color: color, fontSize: 16, fontWeight: FontWeight.w600)),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: color,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
     );
   }
@@ -206,8 +213,11 @@ class _FilledButton extends StatelessWidget {
   final String label;
   final Color color;
   final VoidCallback onTap;
-  const _FilledButton(
-      {required this.label, required this.color, required this.onTap});
+  const _FilledButton({
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -218,14 +228,19 @@ class _FilledButton extends StatelessWidget {
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
           backgroundColor: color,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
         ),
-        child: Text(label,
-            style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600)),
+        child: Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
     );
   }

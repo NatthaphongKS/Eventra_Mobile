@@ -46,13 +46,18 @@ class EventCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.white, Colors.white.withValues(alpha: 0.95)],
+          ),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.divider),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: AppColors.primary.withValues(alpha: 0.08),
+              blurRadius: 14,
+              offset: const Offset(0, 5),
             ),
           ],
         ),
@@ -66,7 +71,7 @@ class EventCard extends StatelessWidget {
                     event.name,
                     style: const TextStyle(
                       fontSize: 17,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w700,
                       color: AppColors.textPrimary,
                     ),
                   ),
@@ -95,15 +100,18 @@ class EventCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: _statusColor.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: _statusColor, width: 1.2),
+                color: _statusColor.withValues(alpha: 0.13),
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(
+                  color: _statusColor.withValues(alpha: 0.6),
+                  width: 1,
+                ),
               ),
               child: Text(
                 _statusLabel,
                 style: TextStyle(
                   color: _statusColor,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                   fontSize: 13,
                 ),
               ),
@@ -127,7 +135,11 @@ class _InfoRow extends StatelessWidget {
       padding: const EdgeInsets.only(top: 4),
       child: Row(
         children: [
-          Icon(icon, size: 14, color: AppColors.textSecondary),
+          Icon(
+            icon,
+            size: 14,
+            color: AppColors.primary.withValues(alpha: 0.75),
+          ),
           const SizedBox(width: 6),
           Expanded(
             child: Text(

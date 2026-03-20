@@ -180,8 +180,8 @@ class _LoginScreenState extends State<LoginScreen> {
         decoration: const BoxDecoration(
           gradient: RadialGradient(
             center: Alignment(-0.3, -0.6),
-            radius: 0.8,
-            colors: [Color(0xFFFFBBBB), Color(0xFFFFF0F0)],
+            radius: 1.0,
+            colors: [Color(0xFFFFCFCF), Color(0xFFFFF6F6)],
           ),
         ),
         child: SafeArea(
@@ -194,10 +194,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Text(
                   'Eventra',
                   style: TextStyle(
-                    fontSize: 52,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 54,
+                    fontWeight: FontWeight.w800,
                     color: AppColors.primary,
                     fontStyle: FontStyle.italic,
+                    letterSpacing: 0.6,
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -224,7 +225,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     filled: true,
                     fillColor: Colors.white.withValues(alpha: 0.9),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(18),
                       borderSide: BorderSide.none,
                     ),
                   ),
@@ -253,7 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     filled: true,
                     fillColor: Colors.white.withValues(alpha: 0.9),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(18),
                       borderSide: BorderSide.none,
                     ),
                   ),
@@ -301,8 +302,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: _isLoading ? null : _signIn,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
+                      elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                     ),
                     child: _isLoading

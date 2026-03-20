@@ -128,9 +128,17 @@ class _EventListScreenState extends State<EventListScreen>
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: AppColors.primary,
-          indicatorWeight: 2,
+          indicatorWeight: 3,
           labelColor: AppColors.primary,
           unselectedLabelColor: AppColors.textSecondary,
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+          ),
+          unselectedLabelStyle: const TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 13,
+          ),
           tabs: List.generate(
             _tabs.length,
             (i) => Tab(
@@ -216,7 +224,11 @@ class _EventTabView extends StatelessWidget {
             SizedBox(height: 12),
             Text(
               'ไม่มีกิจกรรม',
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 16),
+              style: TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ),
