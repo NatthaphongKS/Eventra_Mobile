@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'eventra-mobile.firebasestorage.app',
     measurementId: 'G-8XK1FDD1D3',
   );
+
 }
