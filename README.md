@@ -121,4 +121,4 @@ flutter build apk --release
 
 ## License
 
-This project is for educational/development use unless otherwise specified by the repository owner.
+This project is for educational/development
