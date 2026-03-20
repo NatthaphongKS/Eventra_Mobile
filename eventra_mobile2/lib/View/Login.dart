@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // เพิ่ม import นี้
 // import '../services/api_service.dart'; // ปิดการใช้ API เดิม
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../utils/app_theme.dart';
 import 'home_screen.dart';
 
@@ -43,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // ถ้ายืนยันตัวตนสำเร็จ (credential.user ไม่เป็น null)
       if (credential.user != null) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
+          MaterialPageRoute(builder: (_) => const EventListScreen()),
         );
       }
       
@@ -65,6 +66,102 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  // // 💡 ฟังก์ชัน Seeder สำหรับจำลองข้อมูล
+  // Future<void> _seedGuests() async {
+  //   // 1. เตรียมรายชื่อจำลอง (คุณสามารถเพิ่มหรือแก้ให้ตรงกับรายชื่อจริงได้เลย)
+  //   final List<Map<String, dynamic>> dummyGuests = [
+  //     {
+  //       "email": "66160100@go.buu.ac.th",
+  //       "first_name": "ณัฐพงศ์",
+  //       "last_name": "คงศิลป์",
+  //       "is_checked_in": false
+  //     },
+  //     {
+  //       "email": "66160230@go.buu.ac.th",
+  //       "first_name": "นิธิวดี",
+  //       "last_name": "บัวผัน",
+  //       "is_checked_in": false
+  //     },
+  //     {
+  //       "email": "66160083@go.buu.ac.th",
+  //       "first_name": "ชิตดนัย",
+  //       "last_name": "รัตนเทียนทอง",
+  //       "is_checked_in": false
+  //     },
+  //     {
+  //       "email": "66160101@go.buu.ac.th",
+  //       "first_name": "ณัฐพงษ์",
+  //       "last_name": "คำมา",
+  //       "is_checked_in": false
+  //     },
+  //     {
+  //       "email": "66160081@go.buu.ac.th",
+  //       "first_name": "กัจจาฤกษ์",
+  //       "last_name": "ศรีภิรมย์",
+  //       "is_checked_in": false
+  //     },
+  //     {
+  //       "email": "66160350@go.buu.ac.th",
+  //       "first_name": "ณปรารินทร์",
+  //       "last_name": "เสียงดี",
+  //       "is_checked_in": false
+  //     },
+  //     {
+  //       "email": "66160102@go.buu.ac.th",
+  //       "first_name": "ธนูศิลป์",
+  //       "last_name": "ลีนาราช",
+  //       "is_checked_in": false
+  //     },
+  //     {
+  //       "email": "66160342@go.buu.ac.th",
+  //       "first_name": "กิดากร",
+  //       "last_name": "รัตนหิรัญ",
+  //       "is_checked_in": false
+  //     },
+  //     {
+  //       "email": "66160370@go.buu.ac.th",
+  //       "first_name": "รวีโรจน์",
+  //       "last_name": "สนธิ",
+  //       "is_checked_in": false
+  //     },
+  //     {
+  //       "email": "66160106@go.buu.ac.th",
+  //       "first_name": "ศุภณัฐ",
+  //       "last_name": "พันโกฏิ",
+  //       "is_checked_in": false
+  //     },
+  //     {
+  //       "email": "66160088@go.buu.ac.th",
+  //       "first_name": "โยธิน",
+  //       "last_name": "สีใสธรรม",
+  //       "is_checked_in": false
+  //     }
+  //   ];
+
+  //   try {
+  //     // โชว์ Loading หรือ Print บอกสถานะ
+  //     debugPrint("🚀 กำลังเริ่ม Seed ข้อมูล ${dummyGuests.length} รายการ...");
+      
+  //     final collection = FirebaseFirestore.instance.collection('guests');
+
+  //     // 2. Loop ข้อมูลแล้วสั่ง .add() ทีละคน
+  //     for (var guest in dummyGuests) {
+  //       await collection.add(guest);
+  //     }
+
+  //     debugPrint("✅ ซีดเดอร์ทำงานเสร็จสิ้น! โยนข้อมูลลง Firebase สำเร็จ");
+      
+  //     // (Optional) แสดง SnackBar แจ้งเตือนหน้าจอ
+  //     if (mounted) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(content: Text('Migrate ข้อมูลเรียบร้อยแล้ว! 🎉')),
+  //       );
+  //     }
+  //   } catch (e) {
+  //     debugPrint("❌ เกิดข้อผิดพลาด: $e");
+  //   }
+  // }
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -75,6 +172,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // 💡 1. เพิ่ม FloatingActionButton ชั่วคราวตรงนี้!
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _seedGuests, // เรียกฟังก์ชัน Seed
+      //   backgroundColor: Colors.blue,
+      //   child: const Icon(Icons.upload_file, color: Colors.white),
+      // ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(
@@ -151,7 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderSide: BorderSide.none,
                     ),
                   ),
-                  onSubmitted: (_) => _signIn(),
+                  onSubmitted: (_) => _signIn(), // เรียก Seeder หลังจากล็อกอินสำเร็จ
                 ),
                 if (_error != null) ...[
                   const SizedBox(height: 12),
@@ -209,7 +312,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 32),
                 // Sign Up Link
-            
+                
+
               ],
             ),
           ),

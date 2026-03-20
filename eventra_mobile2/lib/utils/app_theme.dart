@@ -1,124 +1,74 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Primary color (Rose/Pink)
-  static const Color primary = Color(0xFFFF6B6B);
-  
-  // Text colors
-  static const Color textPrimary = Color(0xFF2C3E50);
-  static const Color textSecondary = Color(0xFF95A5A6);
-  
-  // Accent color (Red for errors)
-  static const Color accent = Color(0xFFE74C3C);
-  
-  // Background colors
-  static const Color background = Color(0xFFF8F9FA);
-  static const Color surface = Color(0xFFFFFFFF);
-  
-  // Additional colors
-  static const Color success = Color(0xFF27AE60);
-  static const Color warning = Color(0xFFF39C12);
-  static const Color info = Color(0xFF3498DB);
-  
-  // Gradients
-  static const LinearGradient primaryGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Color(0xFFFF6B6B), Color(0xFFFF8E8E)],
-  );
-  
-  static const RadialGradient backgroundGradient = RadialGradient(
-    center: Alignment(-0.3, -0.6),
-    radius: 0.8,
-    colors: [Color(0xFFFFBBBB), Color(0xFFFFF0F0)],
-  );
+  static const Color primary = Color(0xFF8B1A1A);
+  static const Color primaryLight = Color(0xFFB03030);
+  static const Color primaryDark = Color(0xFF5C0F0F);
+  static const Color accent = Color(0xFFE85555);
+  static const Color background = Color(0xFFFDF0F0);
+  static const Color backgroundGradientStart = Color(0xFFFFE4E4);
+  static const Color backgroundGradientEnd = Color(0xFFFFF0F0);
+  static const Color cardBg = Colors.white;
+  static const Color textPrimary = Color(0xFF1A1A1A);
+  static const Color textSecondary = Color(0xFF666666);
+  static const Color statusOngoing = Color(0xFF4DA6FF);
+  static const Color statusUpcoming = Color(0xFFFFCC44);
+  static const Color statusDone = Color(0xFF66CC88);
+  static const Color inviteButton = Color(0xFFFF7070);
+  static const Color divider = Color(0xFFEEEEEE);
 }
 
 class AppTheme {
-  static ThemeData lightTheme() {
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.light,
-      primaryColor: AppColors.primary,
-      scaffoldBackgroundColor: AppColors.background,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
-        elevation: 0,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 12,
-          ),
+  static ThemeData get theme => ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          primary: AppColors.primary,
         ),
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: AppColors.surface,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: AppColors.textSecondary,
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: AppColors.textSecondary.withOpacity(0.3),
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
+        scaffoldBackgroundColor: AppColors.background,
+        fontFamily: 'Roboto',
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          titleTextStyle: TextStyle(
             color: AppColors.primary,
-            width: 2,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+          iconTheme: IconThemeData(color: AppColors.primary),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            minimumSize: const Size(double.infinity, 52),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            textStyle: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
-        hintStyle: const TextStyle(
-          color: AppColors.textSecondary,
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          ),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         ),
-      ),
-      textTheme: const TextTheme(
-        displayLarge: TextStyle(
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textPrimary,
-        ),
-        displayMedium: TextStyle(
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
-          color: AppColors.textPrimary,
-        ),
-        displaySmall: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textPrimary,
-        ),
-        headlineSmall: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textPrimary,
-        ),
-        bodyLarge: TextStyle(
-          fontSize: 16,
-          color: AppColors.textPrimary,
-        ),
-        bodyMedium: TextStyle(
-          fontSize: 14,
-          color: AppColors.textPrimary,
-        ),
-        bodySmall: TextStyle(
-          fontSize: 12,
-          color: AppColors.textSecondary,
-        ),
-      ),
-    );
-  }
+      );
 }

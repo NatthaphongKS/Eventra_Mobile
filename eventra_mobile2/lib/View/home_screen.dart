@@ -1,180 +1,232 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async'; // 💡 เพิ่ม import นี้สำหรับ Timer
+import '../models/events.dart';
 import '../utils/app_theme.dart';
+import '../widgets/event_card.dart';
+import 'event_detail_screen.dart';
+import 'search_screen.dart';
 import 'Login.dart';
+import 'event_form_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class EventListScreen extends StatefulWidget {
+  const EventListScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<EventListScreen> createState() => _EventListScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final _user = FirebaseAuth.instance.currentUser;
+class _EventListScreenState extends State<EventListScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  List<Event> _events = [];
+  bool _isLoading = true;
+  Timer? _refreshTimer; // 💡 เพิ่มตัวแปร Timer
+
+  final List<String> _tabs = ['Upcoming', 'Ongoing', 'Done'];
+  final List<String> _statuses = ['upcoming', 'ongoing', 'done'];
+  final List<Color> _dotColors = [
+    AppColors.statusUpcoming,
+    AppColors.statusOngoing,
+    AppColors.statusDone,
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
+
+    // 💡 1. ดักจับการเปลี่ยน Tab เพื่อให้วาด UI ใหม่ (คำนวณ currentStatus ใหม่)
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        // setState เพื่อให้หน้าจอคำนวณ .currentStatus แยกหมวดใหม่
+        setState(() {});
+      }
+    });
+
+    _loadEvents();
+
+    // 💡 2. ตั้ง Timer ให้รีเฟรชหน้าจอ (คำนวณสถานะใหม่) ทุกๆ 1 นาที
+    // กรณีผู้ใช้เปิดหน้าจอค้างไว้ พอถึงเวลาปุ๊บ กิจกรรมจะย้าย Tab เอง
+    _refreshTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // 💡 อย่าลืมเคลียร์ Timer และ Controller คืนหน่วยความจำ
+    _refreshTimer?.cancel();
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  // 💡 ฟังก์ชันดึงข้อมูลจาก Firebase Firestore
+  Future<void> _loadEvents() async {
+    setState(() => _isLoading = true);
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('events')
+          .get();
+
+      setState(() {
+        _events = snapshot.docs.map((doc) {
+          final data = doc.data();
+          return Event.fromMap(doc.id, data);
+        }).toList();
+        _isLoading = false;
+      });
+    } catch (e) {
+      debugPrint('Error loading events: $e');
+      setState(() => _isLoading = false);
+    }
+  }
+
+  // ใช้ e.currentStatus เหมือนเดิม ถูกต้องแล้วครับ
+  List<Event> _filteredEvents(String status) =>
+      _events.where((e) => e.currentStatus == status).toList();
 
   Future<void> _logout() async {
     try {
       await FirebaseAuth.instance.signOut();
       if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-      );
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const LoginScreen()));
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error logging out: $e')),
-      );
+      debugPrint('Logout error: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Eventra'),
-        centerTitle: true,
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
-        elevation: 0,
+        title: const Text('Event'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _logout,
-            tooltip: 'ออกจากระบบ',
+            icon: const Icon(Icons.search, color: AppColors.textPrimary),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const SearchScreen()),
+            ),
+          ),
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert, color: AppColors.textPrimary),
+            onSelected: (v) {
+              if (v == 'logout') _logout();
+            },
+            itemBuilder: (_) => const [
+              PopupMenuItem(value: 'logout', child: Text('ออกจากระบบ')),
+            ],
           ),
         ],
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: RadialGradient(
-            center: Alignment(-0.3, -0.6),
-            radius: 0.8,
-            colors: [Color(0xFFFFBBBB), Color(0xFFFFF0F0)],
-          ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ข้อมูลผู้ใช้
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
+        bottom: TabBar(
+          controller: _tabController,
+          indicatorColor: AppColors.primary,
+          indicatorWeight: 2,
+          labelColor: AppColors.primary,
+          unselectedLabelColor: AppColors.textSecondary,
+          tabs: List.generate(
+            _tabs.length,
+            (i) => Tab(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: _dotColors[i],
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'ยินดีต้อนรับ!',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        _user?.email ?? 'ผู้ใช้',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 32),
-                const Text(
-                  'กิจกรรมต่อไป',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
-                              blurRadius: 8,
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Icon(
-                                Icons.event,
-                                color: AppColors.primary,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Event ${index + 1}',
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.textPrimary,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'วันที่ ${25 + index} มีนาคม 2566',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: AppColors.textSecondary,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Icon(
-                              Icons.arrow_forward_ios,
-                              color: AppColors.textSecondary,
-                              size: 16,
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+                  const SizedBox(width: 6),
+                  Text(_tabs[i]),
+                ],
+              ),
             ),
           ),
         ),
       ),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            )
+          : RefreshIndicator(
+              color: AppColors.primary,
+              onRefresh:
+                  _loadEvents, // เวลาดึงหน้าจอลงมา จะโหลดข้อมูลจาก Firebase ใหม่
+              child: TabBarView(
+                controller: _tabController,
+                children: List.generate(
+                  _statuses.length,
+                  (i) => _EventTabView(
+                    events: _filteredEvents(_statuses[i]),
+                    onEventTap: (event) async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => EventDetailScreen(event: event),
+                        ),
+                      );
+                      _loadEvents(); // โหลดข้อมูลใหม่เผื่อมีการแก้ไขในหน้ารายละเอียด
+                    },
+                  ),
+                ),
+              ),
+            ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary,
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const EventFormScreen()),
+          );
+          _loadEvents(); // โหลดข้อมูลใหม่หลังจากสร้าง Event เสร็จ
+        },
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
+    );
+  }
+}
+
+class _EventTabView extends StatelessWidget {
+  final List<Event> events;
+  final Function(Event) onEventTap;
+
+  const _EventTabView({required this.events, required this.onEventTap});
+
+  @override
+  Widget build(BuildContext context) {
+    if (events.isEmpty) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.event_note_outlined,
+              size: 64,
+              color: AppColors.textSecondary,
+            ),
+            SizedBox(height: 12),
+            Text(
+              'ไม่มีกิจกรรม',
+              style: TextStyle(color: AppColors.textSecondary, fontSize: 16),
+            ),
+          ],
+        ),
+      );
+    }
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      itemCount: events.length,
+      itemBuilder: (_, i) =>
+          EventCard(event: events[i], onTap: () => onEventTap(events[i])),
     );
   }
 }

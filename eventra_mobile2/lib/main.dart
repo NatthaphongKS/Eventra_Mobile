@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           
           // ถ้า user ล็อกอินแล้ว ไปหน้า Home
           if (snapshot.hasData) {
-            return const HomeScreen();
+            return const EventListScreen();
           }
           
           // ถ้าไม่ได้ล็อกอิน ไปหน้า Login
