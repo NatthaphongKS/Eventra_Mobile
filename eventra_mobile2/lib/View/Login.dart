@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart'; // เพิ่ม import น
 // import '../services/api_service.dart'; // ปิดการใช้ API เดิม
 import '../utils/app_theme.dart';
 import 'home_screen.dart';
-import 'register.dart';
+
 import 'forgot_password.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -209,36 +209,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 32),
                 // Sign Up Link
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'ยังไม่มีบัญชี? ',
-                      style: TextStyle(
-                        color: AppColors.textSecondary,
-                        fontSize: 14,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const RegisterScreen(),
-                        ),
-                      ),
-                      child: const Text(
-                        'สมัครสมาชิก',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 32),
+            
               ],
             ),
           ),
