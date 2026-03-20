@@ -22,30 +22,30 @@ Eventra Mobile is a Flutter application for event management with Firebase backe
 
 ```text
 lib/
-	main.dart
-	firebase_options.dart
-	View/
-		login.dart
-		register.dart
-		home_screen.dart
-		event_form_screen.dart
-		event_detail_screen.dart
-		event_checkin_screen.dart
-		search_screen.dart
-		forgot_password.dart
-	models/
-		events.dart
-	widgets/
-		event_card.dart
-	utils/
-		app_theme.dart
+  main.dart
+  firebase_options.dart
+  View/
+    login.dart
+    register.dart
+    home_screen.dart
+    event_form_screen.dart
+    event_detail_screen.dart
+    event_checkin_screen.dart
+    search_screen.dart
+    forgot_password.dart
+  models/
+    events.dart
+  widgets/
+    event_card.dart
+  utils/
+    app_theme.dart
 ```
 
 ## Prerequisites
 
 - Flutter SDK installed
 - Dart SDK compatible with the constraint in `pubspec.yaml`:
-	- `sdk: ^3.11.1`
+  - `sdk: ^3.11.1`
 - Android Studio / Xcode (depending on target platform)
 - Firebase project configured for your app
 
