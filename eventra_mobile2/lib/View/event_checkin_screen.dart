@@ -14,19 +14,20 @@ class EventCheckInScreen extends StatefulWidget {
 class _EventCheckInScreenState extends State<EventCheckInScreen> {
   // 💡 ฟังก์ชันสลับสถานะเช็คชื่อ โดยบันทึก ID แขกลงใน Array ของ Event นั้นๆ
   Future<void> _toggleCheckIn(String guestId, bool isCurrentlyCheckedIn) async {
-    final eventRef =
-        FirebaseFirestore.instance.collection('events').doc(widget.event.id);
+    final eventRef = FirebaseFirestore.instance
+        .collection('events')
+        .doc(widget.event.id);
 
     try {
       if (isCurrentlyCheckedIn) {
         // ถ้าเช็คอินอยู่แล้ว -> เอา ID ออกจาก Array (ยกเลิกเช็คชื่อ)
         await eventRef.update({
-          'checkedInList': FieldValue.arrayRemove([guestId])
+          'checkedInList': FieldValue.arrayRemove([guestId]),
         });
       } else {
         // ถ้ายังไม่เช็คอิน -> เพิ่ม ID เข้าไปใน Array (เช็คชื่อ)
         await eventRef.update({
-          'checkedInList': FieldValue.arrayUnion([guestId])
+          'checkedInList': FieldValue.arrayUnion([guestId]),
         });
       }
     } catch (e) {
@@ -64,7 +65,8 @@ class _EventCheckInScreenState extends State<EventCheckInScreen> {
         builder: (context, eventSnapshot) {
           if (eventSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-                child: CircularProgressIndicator(color: AppColors.primary));
+              child: CircularProgressIndicator(color: AppColors.primary),
+            );
           }
 
           // ดึงรายชื่อ Array ของคนที่เช็คอินแล้วจาก Event
@@ -78,7 +80,8 @@ class _EventCheckInScreenState extends State<EventCheckInScreen> {
             builder: (context, guestsSnapshot) {
               if (guestsSnapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
-                    child: CircularProgressIndicator(color: AppColors.primary));
+                  child: CircularProgressIndicator(color: AppColors.primary),
+                );
               }
 
               final guestsDocs = guestsSnapshot.data?.docs ?? [];
@@ -95,13 +98,18 @@ class _EventCheckInScreenState extends State<EventCheckInScreen> {
                         Text(
                           widget.event.name,
                           style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
                         ),
-                        Text(dateStr,
-                            style: const TextStyle(
-                                color: AppColors.textSecondary, fontSize: 13)),
+                        Text(
+                          dateStr,
+                          style: const TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 13,
+                          ),
+                        ),
                         const SizedBox(height: 12),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,14 +117,17 @@ class _EventCheckInScreenState extends State<EventCheckInScreen> {
                             const Text(
                               'รวมรายชื่อเช็คแล้ว',
                               style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 15),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                              ),
                             ),
                             Text(
                               '$checkedInCount/$totalCount',
                               style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                  color: AppColors.textSecondary),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                color: AppColors.textSecondary,
+                              ),
                             ),
                           ],
                         ),
@@ -130,7 +141,8 @@ class _EventCheckInScreenState extends State<EventCheckInScreen> {
                             minHeight: 10,
                             backgroundColor: Colors.grey[200],
                             valueColor: const AlwaysStoppedAnimation<Color>(
-                                Colors.green),
+                              Colors.green,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -148,8 +160,10 @@ class _EventCheckInScreenState extends State<EventCheckInScreen> {
                           )
                         : ListView.separated(
                             itemCount: totalCount,
-                            separatorBuilder: (_, __) => const Divider(
-                                height: 1, color: AppColors.divider),
+                            separatorBuilder: (_, _) => const Divider(
+                              height: 1,
+                              color: AppColors.divider,
+                            ),
                             itemBuilder: (_, i) {
                               final doc = guestsDocs[i];
                               final guestId = doc.id;
@@ -164,20 +178,24 @@ class _EventCheckInScreenState extends State<EventCheckInScreen> {
                                   : '?';
 
                               // 💡 เช็คว่า ID ของคนนี้ อยู่ใน Array การเช็คชื่อของ Event นี้หรือเปล่า
-                              final isCheckedIn =
-                                  checkedInList.contains(guestId);
+                              final isCheckedIn = checkedInList.contains(
+                                guestId,
+                              );
 
                               return ListTile(
                                 leading: CircleAvatar(
                                   backgroundColor: Colors.grey[300],
-                                  child: Text(firstLetter,
-                                      style: const TextStyle(
-                                          color: Colors.white)),
+                                  child: Text(
+                                    firstLetter,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
                                 ),
                                 title: Text(
-                                    fullName.isEmpty ? 'ไม่ระบุชื่อ' : fullName,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w500)),
+                                  fullName.isEmpty ? 'ไม่ระบุชื่อ' : fullName,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
                                 trailing: GestureDetector(
                                   onTap: () =>
                                       _toggleCheckIn(guestId, isCheckedIn),
@@ -193,13 +211,16 @@ class _EventCheckInScreenState extends State<EventCheckInScreen> {
                                         color: isCheckedIn
                                             ? Colors.green
                                             : AppColors.textSecondary
-                                                .withOpacity(0.5),
+                                                  .withValues(alpha: 0.5),
                                         width: 1.5,
                                       ),
                                     ),
                                     child: isCheckedIn
-                                        ? const Icon(Icons.check,
-                                            color: Colors.white, size: 18)
+                                        ? const Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                            size: 18,
+                                          )
                                         : null,
                                   ),
                                 ),

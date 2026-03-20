@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../utils/app_theme.dart';
-import 'Login.dart';
+import 'login.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -57,11 +57,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     try {
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-      );
+      final credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+          );
 
       if (!mounted) return;
 
@@ -139,7 +139,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.2),
+                          color: AppColors.primary.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Icon(
@@ -176,10 +176,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       hintText: 'Email',
-                      prefixIcon: const Icon(Icons.email_outlined,
-                          color: AppColors.textSecondary),
+                      prefixIcon: const Icon(
+                        Icons.email_outlined,
+                        color: AppColors.textSecondary,
+                      ),
                       filled: true,
-                      fillColor: Colors.white.withOpacity(0.9),
+                      fillColor: Colors.white.withValues(alpha: 0.9),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide.none,
@@ -193,8 +195,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
                       hintText: 'Password',
-                      prefixIcon: const Icon(Icons.lock_outline,
-                          color: AppColors.textSecondary),
+                      prefixIcon: const Icon(
+                        Icons.lock_outline,
+                        color: AppColors.textSecondary,
+                      ),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscurePassword
@@ -202,11 +206,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               : Icons.visibility_outlined,
                           color: AppColors.textSecondary,
                         ),
-                        onPressed: () =>
-                            setState(() => _obscurePassword = !_obscurePassword),
+                        onPressed: () => setState(
+                          () => _obscurePassword = !_obscurePassword,
+                        ),
                       ),
                       filled: true,
-                      fillColor: Colors.white.withOpacity(0.9),
+                      fillColor: Colors.white.withValues(alpha: 0.9),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide.none,
@@ -220,8 +225,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     obscureText: _obscureConfirmPassword,
                     decoration: InputDecoration(
                       hintText: 'Confirm Password',
-                      prefixIcon: const Icon(Icons.lock_outline,
-                          color: AppColors.textSecondary),
+                      prefixIcon: const Icon(
+                        Icons.lock_outline,
+                        color: AppColors.textSecondary,
+                      ),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscureConfirmPassword
@@ -230,10 +237,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: AppColors.textSecondary,
                         ),
                         onPressed: () => setState(
-                            () => _obscureConfirmPassword = !_obscureConfirmPassword),
+                          () => _obscureConfirmPassword =
+                              !_obscureConfirmPassword,
+                        ),
                       ),
                       filled: true,
-                      fillColor: Colors.white.withOpacity(0.9),
+                      fillColor: Colors.white.withValues(alpha: 0.9),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide.none,
@@ -243,9 +252,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   if (_error != null) ...[
                     const SizedBox(height: 12),
-                    Text(_error!,
-                        style: const TextStyle(
-                            color: AppColors.accent, fontSize: 14)),
+                    Text(
+                      _error!,
+                      style: const TextStyle(
+                        color: AppColors.accent,
+                        fontSize: 14,
+                      ),
+                    ),
                   ],
                   const SizedBox(height: 32),
                   // Sign Up Button
@@ -265,12 +278,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               width: 24,
                               height: 24,
                               child: CircularProgressIndicator(
-                                  color: Colors.white, strokeWidth: 2))
-                          : const Text('Sign Up',
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text(
+                              'Sign Up',
                               style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white)),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   ),
                   const SizedBox(height: 16),

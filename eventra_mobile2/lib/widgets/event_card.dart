@@ -50,7 +50,7 @@ class EventCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -72,26 +72,30 @@ class EventCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   _InfoRow(
-                      icon: Icons.article_outlined,
-                      text: event.description),
+                    icon: Icons.article_outlined,
+                    text: event.description,
+                  ),
                   _InfoRow(
-                      icon: Icons.calendar_today_outlined, 
-                      text: dateStr), // ใช้วันที่จาก Model 
+                    icon: Icons.calendar_today_outlined,
+                    text: dateStr,
+                  ), // ใช้วันที่จาก Model
                   _InfoRow(
-                      icon: Icons.access_time_outlined,
-                      text: event.time), // ใช้ event.time จาก Model
+                    icon: Icons.access_time_outlined,
+                    text: event.time,
+                  ), // ใช้ event.time จาก Model
                   _InfoRow(
-                      icon: Icons.location_on_outlined, // เปลี่ยนจากไอคอนคนเป็นสถานที่
-                      text: event.location), // ใช้ event.location จาก Model
+                    icon: Icons
+                        .location_on_outlined, // เปลี่ยนจากไอคอนคนเป็นสถานที่
+                    text: event.location,
+                  ), // ใช้ event.location จาก Model
                 ],
               ),
             ),
             const SizedBox(width: 8),
             Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: _statusColor.withOpacity(0.15),
+                color: _statusColor.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: _statusColor, width: 1.2),
               ),
@@ -129,7 +133,9 @@ class _InfoRow extends StatelessWidget {
             child: Text(
               text,
               style: const TextStyle(
-                  fontSize: 13, color: AppColors.textSecondary),
+                fontSize: 13,
+                color: AppColors.textSecondary,
+              ),
               overflow: TextOverflow.ellipsis,
             ),
           ),

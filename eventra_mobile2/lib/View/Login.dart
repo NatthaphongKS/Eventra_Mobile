@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // เพิ่ม import นี้
 // import '../services/api_service.dart'; // ปิดการใช้ API เดิม
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../utils/app_theme.dart';
 import 'home_screen.dart';
 
@@ -16,7 +15,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   // เปลี่ยนชื่อจาก _username เป็น _email ให้ตรงกับ Firebase
-  final _emailController = TextEditingController(); 
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isLoading = false;
@@ -31,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
       _error = null;
     });
-    
+
     try {
       // เรียกใช้ Firebase Authentication ในการล็อกอิน
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -40,14 +39,13 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (!mounted) return;
-      
+
       // ถ้ายืนยันตัวตนสำเร็จ (credential.user ไม่เป็น null)
       if (credential.user != null) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const EventListScreen()),
         );
       }
-      
     } on FirebaseAuthException catch (e) {
       // ดักจับ Error เฉพาะของ Firebase เพื่อแสดงข้อความให้ผู้ใช้เข้าใจง่าย
       String errorMessage = 'เกิดข้อผิดพลาด กรุณาลองใหม่';
@@ -141,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
   //   try {
   //     // โชว์ Loading หรือ Print บอกสถานะ
   //     debugPrint("🚀 กำลังเริ่ม Seed ข้อมูล ${dummyGuests.length} รายการ...");
-      
+
   //     final collection = FirebaseFirestore.instance.collection('guests');
 
   //     // 2. Loop ข้อมูลแล้วสั่ง .add() ทีละคน
@@ -150,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
   //     }
 
   //     debugPrint("✅ ซีดเดอร์ทำงานเสร็จสิ้น! โยนข้อมูลลง Firebase สำเร็จ");
-      
+
   //     // (Optional) แสดง SnackBar แจ้งเตือนหน้าจอ
   //     if (mounted) {
   //       ScaffoldMessenger.of(context).showSnackBar(
@@ -215,13 +213,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 // Email Field (เปลี่ยนจาก Username)
                 TextField(
                   controller: _emailController,
-                  keyboardType: TextInputType.emailAddress, // เพิ่มคีย์บอร์ดแบบอีเมล
+                  keyboardType:
+                      TextInputType.emailAddress, // เพิ่มคีย์บอร์ดแบบอีเมล
                   decoration: InputDecoration(
                     hintText: 'Email', // เปลี่ยน Hint เป็น Email
-                    prefixIcon: const Icon(Icons.email_outlined,
-                        color: AppColors.textSecondary),
+                    prefixIcon: const Icon(
+                      Icons.email_outlined,
+                      color: AppColors.textSecondary,
+                    ),
                     filled: true,
-                    fillColor: Colors.white.withOpacity(0.9),
+                    fillColor: Colors.white.withValues(alpha: 0.9),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide.none,
@@ -235,8 +236,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscureText: _obscurePassword,
                   decoration: InputDecoration(
                     hintText: 'Password',
-                    prefixIcon: const Icon(Icons.lock_outline,
-                        color: AppColors.textSecondary),
+                    prefixIcon: const Icon(
+                      Icons.lock_outline,
+                      color: AppColors.textSecondary,
+                    ),
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword
@@ -248,19 +251,24 @@ class _LoginScreenState extends State<LoginScreen> {
                           setState(() => _obscurePassword = !_obscurePassword),
                     ),
                     filled: true,
-                    fillColor: Colors.white.withOpacity(0.9),
+                    fillColor: Colors.white.withValues(alpha: 0.9),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide.none,
                     ),
                   ),
-                  onSubmitted: (_) => _signIn(), // เรียก Seeder หลังจากล็อกอินสำเร็จ
+                  onSubmitted: (_) =>
+                      _signIn(), // เรียก Seeder หลังจากล็อกอินสำเร็จ
                 ),
                 if (_error != null) ...[
                   const SizedBox(height: 12),
-                  Text(_error!,
-                      style: const TextStyle(
-                          color: AppColors.accent, fontSize: 14)),
+                  Text(
+                    _error!,
+                    style: const TextStyle(
+                      color: AppColors.accent,
+                      fontSize: 14,
+                    ),
+                  ),
                 ],
                 const SizedBox(height: 12),
                 // Forgot password
@@ -302,18 +310,23 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: 24,
                             height: 24,
                             child: CircularProgressIndicator(
-                                color: Colors.white, strokeWidth: 2))
-                        : const Text('Sign In',
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text(
+                            'Sign In',
                             style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white)),
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 32),
-                // Sign Up Link
-                
 
+                // Sign Up Link
               ],
             ),
           ),
