@@ -23,7 +23,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Future<void> _search(String query) async {
     final searchQuery = query
         .trim()
-        .toLowerCase(); // ทำให้เป็นตัวเล็กเพื่อเทียบง่ายๆ
+        .toLowerCase(); // ทำให้เป็นตัวเล็กเทียบง่ายๆ
 
     if (searchQuery.isEmpty) {
       setState(() {

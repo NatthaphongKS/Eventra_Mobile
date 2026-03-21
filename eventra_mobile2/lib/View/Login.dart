@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'; // เพิ่ม import นี้
+import 'package:firebase_auth/firebase_auth.dart'; // เพิ่ม import 
 // import '../services/api_service.dart'; // ปิดการใช้ API เดิม
 import '../utils/app_theme.dart';
 import 'home_screen.dart';
@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } on FirebaseAuthException catch (e) {
-      // ดักจับ Error เฉพาะของ Firebase เพื่อแสดงข้อความให้ผู้ใช้เข้าใจง่าย
+    // ดัก Error เฉพาะของ Firebase อแสดงข้อความ
       String errorMessage = 'เกิดข้อผิดพลาด กรุณาลองใหม่';
       if (e.code == 'user-not-found' || e.code == 'invalid-email') {
         errorMessage = 'ไม่พบผู้ใช้นี้ในระบบ หรือรูปแบบอีเมลไม่ถูกต้อง';

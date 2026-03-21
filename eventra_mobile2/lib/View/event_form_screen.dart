@@ -36,14 +36,14 @@ class _EventFormScreenState extends State<EventFormScreen> {
     super.initState();
     _isEditing = widget.event != null;
 
-    // 💡 ถ้ากำลังแก้ไข ให้โหลดข้อมูลเก่าทั้งหมด
+    // ถ้ากำลังแก้ไข ให้โหลดข้อมูลเก่าทั้งหมด
     if (_isEditing) {
       final event = widget.event!;
       _nameController.text = event.name;
       _detailsController.text = event.description;
       _locationController.text = event.location;
 
-      // 💡 แปลง String วันที่ ("20/3/2567") กลับมาเป็น DateTime
+      // แปลง String วันที่ ("20/3/2567") กลับมาเป็น DateTime
       try {
         List<String> dateParts = event.date.split('/');
         if (dateParts.length == 3) {
@@ -56,7 +56,7 @@ class _EventFormScreenState extends State<EventFormScreen> {
         debugPrint('Error parsing date: $e');
       }
 
-      // 💡 แปลง String เวลา ("13:00 - 15:30") กลับมาเป็น TimeOfDay
+      // แปลง String เวลา ("13:00 - 15:30") กลับมาเป็น TimeOfDay
       try {
         if (event.time.contains('-')) {
           var timeParts = event.time.split('-');
@@ -95,7 +95,7 @@ class _EventFormScreenState extends State<EventFormScreen> {
       context: context,
       initialDate:
           _selectedDate ??
-          DateTime.now(), // 💡 ถ้ามีข้อมูลเดิมให้โชว์เป็นค่าเริ่มต้น
+          DateTime.now(), // ถ้ามีข้อมูลเดิมให้โชว์เป็นค่าเริ่มต้น
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
       builder: (context, child) {
@@ -121,7 +121,7 @@ class _EventFormScreenState extends State<EventFormScreen> {
       context: context,
       initialTime:
           _selectedStartTime ??
-          TimeOfDay.now(), // 💡 ใช้เวลาเดิมเป็นค่าเริ่มต้น
+          TimeOfDay.now(), // ใช้เวลาเดิมเป็นค่าเริ่มต้น
       builder: (context, child) => _timePickerTheme(child),
     );
     if (picked != null) {
@@ -149,7 +149,7 @@ class _EventFormScreenState extends State<EventFormScreen> {
     );
   }
 
-  // 💡 ฟังก์ชันบันทึกข้อมูล (อัปเดตใหม่)
+  // ฟังก์ชันบันทึกข้อมูล (อัปเดตใหม่)
   Future<void> _saveEvent() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -176,7 +176,7 @@ class _EventFormScreenState extends State<EventFormScreen> {
           "${_selectedEndTime!.hour.toString().padLeft(2, '0')}:${_selectedEndTime!.minute.toString().padLeft(2, '0')}";
       final combinedTimeString = "$startTimeStr - $endTimeStr";
 
-      // 💡 เตรียมชุดข้อมูลที่จะเซฟ
+      // เตรียมชุดข้อมูลที่จะเซฟ
       final Map<String, dynamic> eventData = {
         'name': _nameController.text.trim(),
         'description': _detailsController.text.trim(),
@@ -185,7 +185,7 @@ class _EventFormScreenState extends State<EventFormScreen> {
         'time': combinedTimeString,
       };
 
-      // 💡 แยกว่าจะ Create หรือ Update
+      // แยกว่าจะ Create หรือ Update
       if (_isEditing) {
         // แก้ไข: ใช้ .doc(ID).update()
         await FirebaseFirestore.instance
@@ -284,7 +284,7 @@ class _EventFormScreenState extends State<EventFormScreen> {
         title: Text(
           _isEditing
               ? 'Edit Event'
-              : 'Create Event', // 💡 เปลี่ยนชื่อหัวข้อตามโหมด
+              : 'Create Event', // เปลี่ยนชื่อหัวข้อตามโหมด
           style: TextStyle(
             color: _primaryRed,
             fontSize: 24,
@@ -440,7 +440,7 @@ class _EventFormScreenState extends State<EventFormScreen> {
                         : Text(
                             _isEditing
                                 ? 'Update Event'
-                                : 'Save', // 💡 เปลี่ยนชื่อปุ่ม
+                                : 'Save', // เปลี่ยนชื่อปุ่ม
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

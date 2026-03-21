@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // 💡 อย่าลืม import firestore นะครับ
+import 'package:cloud_firestore/cloud_firestore.dart'; // import firestore 
 import '../models/events.dart'; 
 import '../utils/app_theme.dart';
 import 'event_checkin_screen.dart';
@@ -35,7 +35,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     }
   }
 
-  // 💡 ฟังก์ชันสำหรับลบกิจกรรม
+  // ฟังก์ชันสำหรับลบกิจกรรม
   Future<void> _handleDeleteEvent() async {
     // 1. โชว์ Dialog ถามเพื่อความชัวร์
     final bool? confirm = await showDialog<bool>(
@@ -170,7 +170,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
             
             const SizedBox(height: 12), // เพิ่มระยะห่าง
 
-            // 💡 ปุ่มลบกิจกรรม สไตล์ Outline วางไว้ล่างสุด
+            // ปุ่มลบกิจกรรม สไตล์ Outline วางไว้ล่างสุด
             _OutlineButton(
               label: 'ลบกิจกรรม',
               color: AppColors.accent, // สีแดงน้ำตาล

@@ -12,7 +12,7 @@ class EventCheckInScreen extends StatefulWidget {
 }
 
 class _EventCheckInScreenState extends State<EventCheckInScreen> {
-  // 💡 ฟังก์ชันสลับสถานะเช็คชื่อ โดยบันทึก ID แขกลงใน Array ของ Event นั้นๆ
+  //  ฟังก์ชันสลับสถานะเช็คชื่อ โดยบันทึก ID แขกลงใน Array ของ Event นั้นๆ
   Future<void> _toggleCheckIn(String guestId, bool isCurrentlyCheckedIn) async {
     final eventRef = FirebaseFirestore.instance
         .collection('events')
@@ -74,7 +74,7 @@ class _EventCheckInScreenState extends State<EventCheckInScreen> {
           final List<dynamic> checkedInList = eventData?['checkedInList'] ?? [];
           final checkedInCount = checkedInList.length;
 
-          // 💡 StreamBuilder ตัวที่สอง: ดึงรายชื่อแขก 11 คน (จาก Collection หลัก)
+          // StreamBuilder ตัวที่สอง: ดึงรายชื่อแขก 11 คน (จาก Collection หลัก)
           return StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance.collection('guests').snapshots(),
             builder: (context, guestsSnapshot) {

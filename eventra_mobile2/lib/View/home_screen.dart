@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:async'; // 💡 เพิ่ม import นี้สำหรับ Timer
+import 'dart:async'; // เพิ่ม import สำหรับ Timer
 import '../models/events.dart';
 import '../utils/app_theme.dart';
 import '../widgets/event_card.dart';
@@ -22,7 +22,7 @@ class _EventListScreenState extends State<EventListScreen>
   late TabController _tabController;
   List<Event> _events = [];
   bool _isLoading = true;
-  Timer? _refreshTimer; // 💡 เพิ่มตัวแปร Timer
+  Timer? _refreshTimer; // เพิ่มตัวแปร Timer
 
   final List<String> _tabs = ['Upcoming', 'Ongoing', 'Done'];
   final List<String> _statuses = ['upcoming', 'ongoing', 'done'];
@@ -37,7 +37,7 @@ class _EventListScreenState extends State<EventListScreen>
     super.initState();
     _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
 
-    // 💡 1. ดักจับการเปลี่ยน Tab เพื่อให้วาด UI ใหม่ (คำนวณ currentStatus ใหม่)
+    //  ดักจับการเปลี่ยน Tab เพื่อให้วาด UI ใหม่ (คำนวณ currentStatus ใหม่)
     _tabController.addListener(() {
       if (!_tabController.indexIsChanging) {
         // setState เพื่อให้หน้าจอคำนวณ .currentStatus แยกหมวดใหม่
@@ -85,7 +85,7 @@ class _EventListScreenState extends State<EventListScreen>
     }
   }
 
-  // ใช้ e.currentStatus เหมือนเดิม ถูกต้องแล้วครับ
+  // ใช้ e.currentStatus ที่คำนวณแบบ Real-time แทนการเช็คกับ e.status ดิบจากฐานข้อมูล
   List<Event> _filteredEvents(String status) =>
       _events.where((e) => e.currentStatus == status).toList();
 
