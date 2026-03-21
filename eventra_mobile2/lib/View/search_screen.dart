@@ -21,7 +21,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   // --- ปรับฟังก์ชันค้นหาให้ดึงข้อมูลจาก Firebase ---
   Future<void> _search(String query) async {
-    final searchQuery = query.trim().toLowerCase(); // ทำให้เป็นตัวเล็กเพื่อเทียบง่ายๆ
+    final searchQuery = query
+        .trim()
+        .toLowerCase(); // ทำให้เป็นตัวเล็กเพื่อเทียบง่ายๆ
 
     if (searchQuery.isEmpty) {
       setState(() {
@@ -30,18 +32,20 @@ class _SearchScreenState extends State<SearchScreen> {
       });
       return;
     }
-    
+
     setState(() => _isSearching = true);
-    
+
     try {
       // 1. ดึงข้อมูลกิจกรรมทั้งหมดจาก Firestore
-      final snapshot = await FirebaseFirestore.instance.collection('events').get();
-      
+      final snapshot = await FirebaseFirestore.instance
+          .collection('events')
+          .get();
+
       // 2. แปลงเป็น List<Event> และกรองข้อมูลที่มีคำที่ค้นหาอยู่ในชื่อ (name)
       final allEvents = snapshot.docs
           .map((doc) => Event.fromMap(doc.id, doc.data()))
           .toList();
-          
+
       final results = allEvents.where((event) {
         // ค้นหาจากชื่อกิจกรรม (คุณสามารถเพิ่ม || event.description.contains... เพื่อค้นหาจากรายละเอียดได้ด้วย)
         return event.name.toLowerCase().contains(searchQuery);
@@ -81,16 +85,20 @@ class _SearchScreenState extends State<SearchScreen> {
                       autofocus: true,
                       decoration: InputDecoration(
                         hintText: 'ค้นหาอีเว้น...', // ตามในรูปของคุณ
-                        prefixIcon: const Icon(Icons.search,
-                            color: AppColors.textSecondary),
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: AppColors.textSecondary,
+                        ),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: Colors.white.withValues(alpha: 0.95),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(16),
                           borderSide: BorderSide.none,
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
                       ),
                       onChanged: _search, // ค้นหาอัตโนมัติเมื่อพิมพ์
                     ),
@@ -98,9 +106,13 @@ class _SearchScreenState extends State<SearchScreen> {
                   const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: const Text('✕',
-                        style: TextStyle(
-                            fontSize: 20, color: AppColors.textSecondary)),
+                    child: const Text(
+                      '✕',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -108,35 +120,45 @@ class _SearchScreenState extends State<SearchScreen> {
             Expanded(
               child: _isSearching
                   ? const Center(
-                      child:
-                          CircularProgressIndicator(color: AppColors.primary))
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
+                    )
                   : _hasSearched && _results.isEmpty
-                      ? const Center(
-                          child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.search_off,
-                                size: 56, color: AppColors.textSecondary),
-                            SizedBox(height: 12),
-                            Text('ไม่พบกิจกรรม',
-                                style: TextStyle(
-                                    color: AppColors.textSecondary,
-                                    fontSize: 16)),
-                          ],
-                        ))
-                      : ListView.builder(
-                          itemCount: _results.length,
-                          itemBuilder: (_, i) => EventCard(
-                            event: _results[i],
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    EventDetailScreen(event: _results[i]),
-                              ),
+                  ? const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.search_off,
+                            size: 56,
+                            color: AppColors.textSecondary,
+                          ),
+                          SizedBox(height: 12),
+                          Text(
+                            'ไม่พบกิจกรรม',
+                            style: TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: _results.length,
+                      itemBuilder: (_, i) => EventCard(
+                        event: _results[i],
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                EventDetailScreen(event: _results[i]),
+                          ),
                         ),
+                      ),
+                    ),
             ),
           ],
         ),

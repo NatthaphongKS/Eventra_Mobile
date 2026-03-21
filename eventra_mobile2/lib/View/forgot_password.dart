@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/app_theme.dart';
 
-
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
 
@@ -12,8 +11,8 @@ class ForgotPasswordScreen extends StatelessWidget {
         decoration: const BoxDecoration(
           gradient: RadialGradient(
             center: Alignment(-0.3, -0.6),
-            radius: 0.8,
-            colors: [Color(0xFFFFBBBB), Color(0xFFFFF0F0)],
+            radius: 1.0,
+            colors: [Color(0xFFFFCFCF), Color(0xFFFFF6F6)],
           ),
         ),
         child: SafeArea(
@@ -32,8 +31,8 @@ class ForgotPasswordScreen extends StatelessWidget {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
+                          color: AppColors.primary.withValues(alpha: 0.16),
+                          borderRadius: BorderRadius.circular(14),
                         ),
                         child: const Icon(
                           Icons.arrow_back,
@@ -47,10 +46,11 @@ class ForgotPasswordScreen extends StatelessWidget {
                   const Text(
                     'Eventra',
                     style: TextStyle(
-                      fontSize: 52,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 54,
+                      fontWeight: FontWeight.w800,
                       color: AppColors.primary,
                       fontStyle: FontStyle.italic,
+                      letterSpacing: 0.6,
                     ),
                   ),
                   const SizedBox(height: 80),
@@ -59,12 +59,12 @@ class ForgotPasswordScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(18),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.15),
-                          blurRadius: 15,
-                          offset: const Offset(0, 5),
+                          color: AppColors.primary.withValues(alpha: 0.11),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
                         ),
                       ],
                     ),
@@ -107,8 +107,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                       onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
+                        elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(32),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                       child: const Text(
