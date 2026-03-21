@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:intl/intl.dart'; // 💡 ไม่ต้องใช้แล้ว เพราะเราเก็บวันที่เป็น String ไปเลย
-import '../models/events.dart'; // 💡 เช็คให้ชัวร์ว่าเป็น events.dart หรือ event.dart ตามไฟล์ของคุณนะครับ
+import 'package:cloud_firestore/cloud_firestore.dart'; // 💡 อย่าลืม import firestore นะครับ
+import '../models/events.dart'; 
 import '../utils/app_theme.dart';
-// ลบ import 'event_invite_screen.dart'; ออกไปแล้ว
 import 'event_checkin_screen.dart';
 import 'event_form_screen.dart';
 
@@ -36,9 +35,52 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     }
   }
 
+  // 💡 ฟังก์ชันสำหรับลบกิจกรรม
+  Future<void> _handleDeleteEvent() async {
+    // 1. โชว์ Dialog ถามเพื่อความชัวร์
+    final bool? confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('ยืนยันการลบ', style: TextStyle(fontWeight: FontWeight.bold)),
+        content: Text('คุณแน่ใจหรือไม่ว่าต้องการลบกิจกรรม "${_event.name}"?\nข้อมูลนี้จะไม่สามารถกู้คืนได้'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false), // ไม่ลบ
+            child: const Text('ยกเลิก', style: TextStyle(color: Colors.grey, fontSize: 16)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true), // ยืนยันลบ
+            child: const Text('ลบกิจกรรม', style: TextStyle(color: AppColors.accent, fontSize: 16, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+
+    // 2. ถ้ากดยืนยันการลบ
+    if (confirm == true) {
+      try {
+        // สั่งลบจาก Firestore โดยใช้ ID ของกิจกรรม
+        await FirebaseFirestore.instance.collection('events').doc(_event.id).delete();
+        
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('ลบกิจกรรมสำเร็จ')),
+        );
+        
+        // ลบเสร็จแล้วให้เด้งกลับไปหน้า Home
+        Navigator.pop(context); 
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('เกิดข้อผิดพลาดในการลบ: $e')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // 💡 ใช้วันที่จาก Model ได้โดยตรงเลย
     final dateStr = _event.date;
 
     return Scaffold(
@@ -86,7 +128,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
             _DetailSection(title: 'สถานที่จัด', content: _event.location),
             const SizedBox(height: 20),
             Text(
-              _event.time, // 💡 เปลี่ยนมาใช้ _event.time จาก Model ใหม่
+              _event.time, 
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -94,39 +136,27 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
               ),
             ),
             const SizedBox(height: 12),
-
-            // 💡 ซ่อนจำนวนผู้เข้าร่วมไว้ก่อน เพราะถ้าใช้ Firebase ต้องไป Query นับจำนวนจากหน้าอื่นมาแทน
-            /*
-            Text(
-              'ผู้เข้าร่วม ${_event.participantCount} คน',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            const SizedBox(height: 12),
-            */
             _DetailSection(title: 'สถานะ', content: _statusThai),
             const SizedBox(height: 32),
+            
             // Buttons
             _OutlineButton(
               label: 'แก้ไข',
               color: AppColors.primary,
               onTap: () async {
-                final updated = await Navigator.push<Event>(
+                final updated = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (_) => EventFormScreen(event: _event),
                   ),
                 );
-                if (updated != null) {
+                if (updated != null && updated is Event) {
                   setState(() => _event = updated);
                 }
               },
             ),
             const SizedBox(height: 12),
-            // 💡 ลบปุ่มจัดการผู้เข้าร่วมออกไปแล้วจากตรงนี้
+            
             _FilledButton(
               label: 'เช็คชื่อผู้เข้าร่วม',
               color: AppColors.primaryDark,
@@ -137,6 +167,16 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                 ),
               ),
             ),
+            
+            const SizedBox(height: 12), // เพิ่มระยะห่าง
+
+            // 💡 ปุ่มลบกิจกรรม สไตล์ Outline วางไว้ล่างสุด
+            _OutlineButton(
+              label: 'ลบกิจกรรม',
+              color: AppColors.accent, // สีแดงน้ำตาล
+              onTap: _handleDeleteEvent, // เรียกฟังก์ชันลบ
+            ),
+            
             const SizedBox(height: 20),
           ],
         ),
@@ -144,7 +184,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     );
   }
 }
-
 class _DetailSection extends StatelessWidget {
   final String title;
   final String content;
