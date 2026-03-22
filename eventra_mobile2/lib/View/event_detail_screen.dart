@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // import firestore 
+import 'package:cloud_firestore/cloud_firestore.dart'; 
 import '../models/events.dart'; 
 import '../utils/app_theme.dart';
 import 'event_checkin_screen.dart';
@@ -22,8 +22,11 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     _event = widget.event;
   }
 
+  // ปรับแก้ให้คำนวณจากวันและเวลาจริง 
+// ดึงสถานะที่คำนวณแบบ Real-time จาก Model แล้วมาแปลเป็นภาษาไทย
   String get _statusThai {
-    switch (_event.status) {
+    // ใช้ _event.currentStatus (ไม่ใช่ _event.status)
+    switch (_event.currentStatus) {
       case 'ongoing':
         return 'กำลังจัด';
       case 'upcoming':
@@ -31,13 +34,12 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       case 'done':
         return 'เสร็จสิ้น';
       default:
-        return _event.status;
+        return _event.currentStatus;
     }
   }
 
   // ฟังก์ชันสำหรับลบกิจกรรม
   Future<void> _handleDeleteEvent() async {
-    // 1. โชว์ Dialog ถามเพื่อความชัวร์
     final bool? confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -57,10 +59,8 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       ),
     );
 
-    // 2. ถ้ากดยืนยันการลบ
     if (confirm == true) {
       try {
-        // สั่งลบจาก Firestore โดยใช้ ID ของกิจกรรม
         await FirebaseFirestore.instance.collection('events').doc(_event.id).delete();
         
         if (!mounted) return;
@@ -68,7 +68,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
           const SnackBar(content: Text('ลบกิจกรรมสำเร็จ')),
         );
         
-        // ลบเสร็จแล้วให้เด้งกลับไปหน้า Home
         Navigator.pop(context); 
       } catch (e) {
         if (!mounted) return;
@@ -76,6 +75,19 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
           SnackBar(content: Text('เกิดข้อผิดพลาดในการลบ: $e')),
         );
       }
+    }
+  }
+
+  Future<void> _refreshEventData() async {
+    try {
+      final doc = await FirebaseFirestore.instance.collection('events').doc(_event.id).get();
+      if (doc.exists && mounted) {
+        setState(() {
+          _event = Event.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+        });
+      }
+    } catch (e) {
+      debugPrint("Error fetching event: $e");
     }
   }
 
@@ -139,21 +151,19 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
             _DetailSection(title: 'สถานะ', content: _statusThai),
             const SizedBox(height: 32),
             
-            IconButton(
-      icon: const Icon(Icons.edit),
-     onPressed: () async {
-    // 1. ใส่ await เพื่อรอให้หน้า Form ปิดลงก่อน
-     await Navigator.push(
-      context,
-        MaterialPageRoute(
-        builder: (context) => EventFormScreen(event: widget.event),
-        ),
-    );
-
-       // 2. หลังจากหน้า Form ปิดลง (pop) ให้ดึงข้อมูลใหม่มาอัปเดตหน้า Detail ทันที
-    _refreshEventData(); 
-  },
-),
+            _OutlineButton(
+              label: 'แก้ไขกิจกรรม',
+              color: AppColors.primary, 
+              onTap: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EventFormScreen(event: _event),
+                  ),
+                );
+                _refreshEventData(); 
+              },
+            ),
             const SizedBox(height: 12),
             
             _FilledButton(
@@ -167,13 +177,12 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
               ),
             ),
             
-            const SizedBox(height: 12), // เพิ่มระยะห่าง
+            const SizedBox(height: 12),
 
-            // ปุ่มลบกิจกรรม สไตล์ Outline วางไว้ล่างสุด
             _OutlineButton(
               label: 'ลบกิจกรรม',
-              color: AppColors.accent, // สีแดงน้ำตาล
-              onTap: _handleDeleteEvent, // เรียกฟังก์ชันลบ
+              color: AppColors.accent,
+              onTap: _handleDeleteEvent,
             ),
             
             const SizedBox(height: 20),
@@ -181,17 +190,6 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
         ),
       ),
     );
-  }
-}
-
-// ฟังก์ชันสำหรับดึงข้อมูล Event ก้อนนี้มาใหม่ (เขียนเพิ่มในหน้า Detail)
-Future<void> _refreshEventData() async {
-  final doc = await FirebaseFirestore.instance.collection('events').doc(widget.event.id).get();
-  if (doc.exists) {
-    setState(() {
-      // อัปเดตตัวแปร event ของหน้านี้ด้วยข้อมูลใหม่จาก Firebase
-      widget.event = Event.fromMap(doc.id, doc.data()!); 
-    });
   }
 }
 
