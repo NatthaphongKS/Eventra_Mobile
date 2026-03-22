@@ -139,22 +139,21 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
             _DetailSection(title: 'สถานะ', content: _statusThai),
             const SizedBox(height: 32),
             
-            // Buttons
-            _OutlineButton(
-              label: 'แก้ไข',
-              color: AppColors.primary,
-              onTap: () async {
-                final updated = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => EventFormScreen(event: _event),
-                  ),
-                );
-                if (updated != null && updated is Event) {
-                  setState(() => _event = updated);
-                }
-              },
-            ),
+            IconButton(
+      icon: const Icon(Icons.edit),
+     onPressed: () async {
+    // 1. ใส่ await เพื่อรอให้หน้า Form ปิดลงก่อน
+     await Navigator.push(
+      context,
+        MaterialPageRoute(
+        builder: (context) => EventFormScreen(event: widget.event),
+        ),
+    );
+
+       // 2. หลังจากหน้า Form ปิดลง (pop) ให้ดึงข้อมูลใหม่มาอัปเดตหน้า Detail ทันที
+    _refreshEventData(); 
+  },
+),
             const SizedBox(height: 12),
             
             _FilledButton(
@@ -184,6 +183,18 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     );
   }
 }
+
+// ฟังก์ชันสำหรับดึงข้อมูล Event ก้อนนี้มาใหม่ (เขียนเพิ่มในหน้า Detail)
+Future<void> _refreshEventData() async {
+  final doc = await FirebaseFirestore.instance.collection('events').doc(widget.event.id).get();
+  if (doc.exists) {
+    setState(() {
+      // อัปเดตตัวแปร event ของหน้านี้ด้วยข้อมูลใหม่จาก Firebase
+      widget.event = Event.fromMap(doc.id, doc.data()!); 
+    });
+  }
+}
+
 class _DetailSection extends StatelessWidget {
   final String title;
   final String content;
